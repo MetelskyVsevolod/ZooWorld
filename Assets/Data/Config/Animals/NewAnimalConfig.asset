@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d74ef9e920008848af3f078bf2e4d4b, type: 3}
+  m_Name: NewAnimalConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Animals.Core.AnimalConfig
+  animalName: Test
+  role: 0
+  prefab: {fileID: 8390411999951361059, guid: 4f3b248626e5bd34f9ff18b092c58a00, type: 3}
+  spawnWeight: 1
+  movementStrategy:
+    rid: 925658485245870149
+  references:
+    version: 2
+    RefIds:
+    - rid: 925658485245870149
+      type: {class: LinearMovement, ns: Animals.Movement, asm: Assembly-CSharp}
+      data:
+        speed: 3
