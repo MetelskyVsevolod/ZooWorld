@@ -15,13 +15,13 @@ MonoBehaviour:
   animalName: Test
   role: 0
   prefab: {fileID: 8390411999951361059, guid: 4f3b248626e5bd34f9ff18b092c58a00, type: 3}
-  spawnWeight: 1
   movementStrategy:
-    rid: 925658485245870149
+    rid: 925658485409448025
   references:
     version: 2
     RefIds:
-    - rid: 925658485245870149
-      type: {class: LinearMovement, ns: Animals.Movement, asm: Assembly-CSharp}
+    - rid: 925658485409448025
+      type: {class: JumpMovement, ns: Animals.Movement, asm: Assembly-CSharp}
       data:
-        speed: 3
+        jumpForce: 5
+        jumpInterval: 1.5
