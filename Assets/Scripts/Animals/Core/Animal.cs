@@ -29,6 +29,12 @@ namespace Animals.Core
         
         public void Initialize(AnimalConfig config)
         {
+            if (config.MovementStrategy == null)
+            {
+                Debug.LogError($"[Animal] {nameof(config.MovementStrategy)} is null on config '{config.AnimalName}'!");
+                return;
+            }
+            
             Config = config;
             IsAlive = true;
             
