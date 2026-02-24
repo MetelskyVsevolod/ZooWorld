@@ -43,6 +43,8 @@ namespace Installers
                 .FromComponentInHierarchy()
                 .AsSingle()
                 .NonLazy();
+            
+            Container.Bind<CollisionResolver>().AsSingle().NonLazy();
         }
     }
 }
