@@ -10,7 +10,10 @@ namespace Animals.Movement
         [SerializeField] private float speed = 3f;
         [NonSerialized] private Vector3 _direction;
 
-        public override void OnInitialize(Animal animal) => PickRandomDirection();
+        public override void OnInitialize(Animal animal)
+        {
+            PickRandomDirection();
+        }
 
         public override void Tick(Animal animal)
         {
