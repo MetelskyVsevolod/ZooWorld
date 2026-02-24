@@ -49,8 +49,8 @@ namespace Installers
             Container.Bind<CollisionResolver>().AsSingle().NonLazy();
             
             Container.Bind<TastyLabelView>()
-                .FromComponentInNewPrefab(tastyLabelPrefab)
-                .AsTransient();
+                .FromInstance(tastyLabelPrefab)
+                .AsSingle();
 
             Container.Bind<TastyLabelPool>()
                 .AsSingle();
