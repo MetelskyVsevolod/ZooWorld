@@ -11,12 +11,14 @@ namespace UI
         [SerializeField] private TextMeshProUGUI label;
         [SerializeField] private AnimalRole trackedRole;
 
+        private GameEventBus _eventBus;
         private int _count;
 
         [Inject]
         public void Construct(GameEventBus eventBus)
         {
-            eventBus.Subscribe<AnimalDiedEvent>(OnAnimalDied);
+            _eventBus = eventBus;
+            _eventBus.Subscribe<AnimalDiedEvent>(OnAnimalDied);
         }
 
         private void Start()
@@ -24,6 +26,11 @@ namespace UI
             Refresh();
         }
 
+        private void OnDestroy()
+        {
+            _eventBus.Unsubscribe<AnimalDiedEvent>(OnAnimalDied);
+        }
+        
         private void OnAnimalDied(AnimalDiedEvent evt)
         {
             if (evt.Animal.Config.role != trackedRole)

@@ -1,11 +1,12 @@
+using System;
 using Animals.Core;
 using Events;
-using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 namespace Systems
 {
-    public class CollisionResolver
+    public class CollisionResolver : IDisposable
     {
         private readonly GameEventBus _eventBus;
 
@@ -16,6 +17,11 @@ namespace Systems
             _eventBus.Subscribe<AnimalCollisionEvent>(OnCollision);
         }
 
+        public void Dispose()
+        {
+            _eventBus.Unsubscribe<AnimalCollisionEvent>(OnCollision);
+        }
+        
         private void OnCollision(AnimalCollisionEvent evt)
         {
             var initiator = evt.Initiator;

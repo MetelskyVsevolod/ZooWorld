@@ -1,13 +1,15 @@
+using System;
 using System.Collections.Generic;
 using Animals.Core;
 using Events;
 using UnityEngine;
 using UnityEngine.Pool;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Spawning
 {
-    public class AnimalPool
+    public class AnimalPool : IDisposable
     {
         private readonly DiContainer _container;
         private readonly GameEventBus _eventBus;
@@ -40,6 +42,11 @@ namespace Spawning
                 return;
             }
             pool.Release(animal);
+        }
+        
+        public void Dispose()
+        {
+            _eventBus.Unsubscribe<AnimalDiedEvent>(OnAnimalDied);
         }
         
         private ObjectPool<Animal> GetOrCreatePool(AnimalConfig config)
