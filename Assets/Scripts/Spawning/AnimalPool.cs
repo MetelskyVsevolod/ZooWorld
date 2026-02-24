@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Animals.Core;
+using Common;
 using EventsHandling;
 using EventsHandling.Events;
 using Extensions;
@@ -26,7 +27,7 @@ namespace Spawning
         public AnimalPool(
             DiContainer container,
             GameEventBus eventBus,
-            [Inject(Id = "PoolRoot")] Transform poolRoot)
+            [Inject(Id = Constants.PoolRootTransformId)] Transform poolRoot)
         {
             _container = container;
             _eventBus = eventBus;

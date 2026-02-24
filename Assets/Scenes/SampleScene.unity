@@ -149,9 +149,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c7fc6e5d2af04045bf481a298764140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZooWorld.Installers.GameInstaller
-  tastyLabelPrefab: {fileID: 6672969386286038910, guid: def4935d9b13a864abb8cec34082f0da, type: 3}
   spawnSettings: {fileID: 11400000, guid: 01fdbb70bae4f33448cdad0cfb16f49c, type: 2}
   poolRoot: {fileID: 2032957323}
+  animalSpawner: {fileID: 1335470027}
+  boundaryChecker: {fileID: 1996930352}
+  tastyLabelPrefab: {fileID: 6672969386286038910, guid: def4935d9b13a864abb8cec34082f0da, type: 3}
 --- !u!114 &227691288
 MonoBehaviour:
   m_ObjectHideFlags: 0
