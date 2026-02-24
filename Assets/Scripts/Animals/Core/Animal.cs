@@ -8,7 +8,9 @@ namespace Animals.Core
     {
         [Inject] private GameEventBus _eventBus;
         [SerializeField] private Rigidbody rigidbodyComponent;
-        
+        [SerializeField] private Transform canvasTransformSlot;
+
+        public Transform CanvasTransformSlot => canvasTransformSlot;
         public AnimalConfig Config { get; private set; }
         public Rigidbody RigidbodyComponent => rigidbodyComponent;
 

@@ -1,6 +1,7 @@
 using Events;
 using Spawning;
 using Systems;
+using UI;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +9,7 @@ namespace Installers
 {
     public class GameInstaller : MonoInstaller
     {
+        [SerializeField] private TastyLabelView tastyLabelPrefab;
         [SerializeField] private SpawnSettings spawnSettings;
         [SerializeField] private Transform poolRoot;
 
@@ -45,6 +47,18 @@ namespace Installers
                 .NonLazy();
             
             Container.Bind<CollisionResolver>().AsSingle().NonLazy();
+            
+            Container.Bind<TastyLabelView>()
+                .FromComponentInNewPrefab(tastyLabelPrefab)
+                .AsTransient();
+
+            Container.Bind<TastyLabelPool>()
+                .AsSingle();
+
+            Container.Bind<TastyLabelHandler>()
+                .AsSingle()
+                .NonLazy();
+
         }
     }
 }
