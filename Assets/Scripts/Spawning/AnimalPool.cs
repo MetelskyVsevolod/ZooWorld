@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Animals.Core;
 using Events;
+using Extensions;
 using UnityEngine;
 using UnityEngine.Pool;
 using Zenject;
@@ -11,6 +12,9 @@ namespace Spawning
 {
     public class AnimalPool : IDisposable
     {
+        private const int DefaultCapacity = 10;
+        private const int MaxSize = 100;
+        
         private readonly DiContainer _container;
         private readonly GameEventBus _eventBus;
         private readonly Transform _poolRoot;
@@ -29,19 +33,10 @@ namespace Spawning
 
             _eventBus.Subscribe<AnimalDiedEvent>(OnAnimalDied);
         }
-        
+
         public Animal Get(AnimalConfig config)
         {
             return GetOrCreatePool(config).Get();
-        }
-        
-        public void Release(Animal animal)
-        {
-            if (!_pools.TryGetValue(animal.Config, out var pool)) 
-            {
-                return;
-            }
-            pool.Release(animal);
         }
         
         public void Dispose()
@@ -49,6 +44,16 @@ namespace Spawning
             _eventBus.Unsubscribe<AnimalDiedEvent>(OnAnimalDied);
         }
         
+        private void Release(Animal animal)
+        {
+            if (!_pools.TryGetValue(animal.Config, out var pool))
+            {
+                return;
+            }
+
+            pool.Release(animal);
+        }
+
         private ObjectPool<Animal> GetOrCreatePool(AnimalConfig config)
         {
             if (_pools.TryGetValue(config, out var existing))
@@ -58,12 +63,12 @@ namespace Spawning
 
             var pool = new ObjectPool<Animal>(
                 createFunc: () => CreateAnimal(config),
-                actionOnGet: animal => animal.Revive(),
-                actionOnRelease: animal => { animal.gameObject.SetActive(false); animal.transform.SetParent(_poolRoot); },
-                actionOnDestroy: animal => Object.Destroy(animal.gameObject),
+                actionOnGet: OnGetAnimal,
+                actionOnRelease: OnReleaseAnimal,
+                actionOnDestroy: OnDestroyAnimal,
                 collectionCheck: false,
-                defaultCapacity: 10,
-                maxSize: 100
+                defaultCapacity: DefaultCapacity,
+                maxSize: MaxSize
             );
 
             _pools[config] = pool;
@@ -73,16 +78,25 @@ namespace Spawning
         private Animal CreateAnimal(AnimalConfig config)
         {
             var spawnedAnimal = _container.InstantiatePrefab(config.prefab, _poolRoot);
-            var animal = spawnedAnimal.GetComponent<Animal>();
-
-            if (animal == null)
-            {
-                animal = spawnedAnimal.AddComponent<Animal>();
-            }
-
-            return animal;
+            return spawnedAnimal.GetOrAddComponent<Animal>();
         }
-        
+
+        private void OnGetAnimal(Animal animal)
+        {
+            animal.Revive();
+        }
+
+        private void OnReleaseAnimal(Animal animal)
+        {
+            animal.gameObject.SetActive(false);
+            animal.transform.SetParent(_poolRoot);
+        }
+
+        private void OnDestroyAnimal(Animal animal)
+        {
+            Object.Destroy(animal.gameObject);
+        }
+
         private void OnAnimalDied(AnimalDiedEvent evt)
         {
             Release(evt.Animal);
