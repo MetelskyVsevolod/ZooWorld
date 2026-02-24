@@ -32,10 +32,10 @@ namespace Animals.Core
             Config = config;
             IsAlive = true;
             
-            _movement = config.movementStrategy.Clone();
+            _movement = config.MovementStrategy.Clone();
             _movement.OnInitialize(this);
 
-            gameObject.name = config.animalName;
+            gameObject.name = config.AnimalName;
             _eventBus.Publish(new AnimalSpawnedEvent(this));
         }
         

@@ -33,7 +33,7 @@ namespace UI
         
         private void OnAnimalDied(AnimalDiedEvent evt)
         {
-            if (evt.Animal.Config.role != trackedRole)
+            if (evt.Animal.Config.Role != trackedRole)
             {
                 return;
             }

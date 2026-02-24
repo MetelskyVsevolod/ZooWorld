@@ -5,16 +5,14 @@ namespace Animals.Core
     [CreateAssetMenu(menuName = "ZooWorld/Animal Config", fileName = "NewAnimalConfig")]
     public class AnimalConfig : ScriptableObject
     {
-        [Header("Identity")]
-        public string animalName;
-        public AnimalRole role;
+        [SerializeField] private string animalName;
+        [SerializeField] private AnimalRole role;
+        [SerializeField] private GameObject prefab;
+        [SerializeReference] private MovementStrategyBase movementStrategy;
 
-        [Header("Visuals")]
-        public GameObject prefab;
-        
-        [Header("Movement")]
-        [Tooltip("Pick a movement type from the dropdown. Its parameters appear inline below.")]
-        [SerializeReference]
-        public MovementStrategyBase movementStrategy;
+        public string AnimalName => animalName;
+        public AnimalRole Role => role;
+        public GameObject Prefab => prefab;
+        public MovementStrategyBase MovementStrategy => movementStrategy;
     }
 }

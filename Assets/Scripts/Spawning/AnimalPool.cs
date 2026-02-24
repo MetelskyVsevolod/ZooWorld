@@ -77,7 +77,7 @@ namespace Spawning
 
         private Animal CreateAnimal(AnimalConfig config)
         {
-            var spawnedAnimal = _container.InstantiatePrefab(config.prefab, _poolRoot);
+            var spawnedAnimal = _container.InstantiatePrefab(config.Prefab, _poolRoot);
             return spawnedAnimal.GetOrAddComponent<Animal>();
         }
 

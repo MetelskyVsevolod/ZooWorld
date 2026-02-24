@@ -32,19 +32,19 @@ namespace Systems
                 return;
             }
 
-            if (initiator.Config.role == AnimalRole.Prey && other.Config.role == AnimalRole.Prey)
+            if (initiator.Config.Role == AnimalRole.Prey && other.Config.Role == AnimalRole.Prey)
             {
                 return;
             }
 
-            if (initiator.Config.role == AnimalRole.Predator && other.Config.role == AnimalRole.Predator)
+            if (initiator.Config.Role == AnimalRole.Predator && other.Config.Role == AnimalRole.Predator)
             {
                 ResolvePredatorVsPredator(initiator, other);
                 return;
             }
 
-            var predator = initiator.Config.role == AnimalRole.Predator ? initiator : other;
-            var prey = initiator.Config.role == AnimalRole.Prey ? initiator : other;
+            var predator = initiator.Config.Role == AnimalRole.Predator ? initiator : other;
+            var prey = initiator.Config.Role == AnimalRole.Prey ? initiator : other;
             ResolvePreyVsPredator(predator, prey);
         }
 

@@ -29,7 +29,7 @@ namespace Spawning
         {
             while (true)
             {
-                var delay = Random.Range(_settings.minSpawnInterval, _settings.maxSpawnInterval);
+                var delay = Random.Range(_settings.MinSpawnInterval, _settings.MaxSpawnInterval);
                 yield return new WaitForSeconds(delay);
                 SpawnOne();
             }
@@ -44,12 +44,12 @@ namespace Spawning
         
         private AnimalConfig PickConfig()
         {
-            return _settings.animalConfigs.GetRandom();
+            return _settings.AnimalConfigs.GetRandom();
         }
 
         private Vector3 GetRandomSpawnPosition()
         {
-            var h = _settings.spawnAreaHalfExtents;
+            var h = _settings.SpawnAreaHalfExtents;
             return new Vector3(
                 Random.Range(-h.x, h.x),
                 0f,
