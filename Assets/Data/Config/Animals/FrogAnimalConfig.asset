@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d74ef9e920008848af3f078bf2e4d4b, type: 3}
-  m_Name: NewAnimalConfig
+  m_Name: FrogAnimalConfig
   m_EditorClassIdentifier: Assembly-CSharp::Animals.Core.AnimalConfig
-  animalName: Test
+  animalName: Frog
   role: 0
   prefab: {fileID: 8390411999951361059, guid: 4f3b248626e5bd34f9ff18b092c58a00, type: 3}
   movementStrategy:
-    rid: 925658485409448025
+    rid: 925658499114336327
   references:
     version: 2
     RefIds:
-    - rid: 925658485409448025
+    - rid: 925658499114336327
       type: {class: JumpMovement, ns: Animals.Movement, asm: Assembly-CSharp}
       data:
         jumpForce: 5

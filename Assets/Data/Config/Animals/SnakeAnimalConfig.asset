@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d74ef9e920008848af3f078bf2e4d4b, type: 3}
+  m_Name: SnakeAnimalConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Animals.Core.AnimalConfig
+  animalName: Snake
+  role: 1
+  prefab: {fileID: 8390411999951361059, guid: 799aa2bbc1e1c1940b96440077cdd092, type: 3}
+  movementStrategy:
+    rid: 925658499114336328
+  references:
+    version: 2
+    RefIds:
+    - rid: 925658499114336328
+      type: {class: LinearMovement, ns: Animals.Movement, asm: Assembly-CSharp}
+      data:
+        speed: 3
