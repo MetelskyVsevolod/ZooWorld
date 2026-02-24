@@ -10,10 +10,9 @@ namespace Animals.Core
         [SerializeField] private Rigidbody rigidbodyComponent;
         [SerializeField] private Transform canvasTransformSlot;
 
-        public Transform CanvasTransformSlot => canvasTransformSlot;
         public AnimalConfig Config { get; private set; }
+        public Transform CanvasTransformSlot => canvasTransformSlot;
         public Rigidbody RigidbodyComponent => rigidbodyComponent;
-
         public bool IsAlive { get; private set; }
 
         private MovementStrategyBase _movement;

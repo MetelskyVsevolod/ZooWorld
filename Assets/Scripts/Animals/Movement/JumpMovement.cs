@@ -12,7 +12,10 @@ namespace Animals.Movement
 
         [NonSerialized] private float _timer;
 
-        public override void OnInitialize(Animal animal) => _timer = jumpInterval;
+        public override void OnInitialize(Animal animal)
+        {
+            _timer = jumpInterval;
+        }
 
         public override void Tick(Animal animal)
         {
