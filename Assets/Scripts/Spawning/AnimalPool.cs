@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Animals.Core;
-using Events;
+using EventsHandling;
+using EventsHandling.Events;
 using Extensions;
 using UnityEngine;
 using UnityEngine.Pool;

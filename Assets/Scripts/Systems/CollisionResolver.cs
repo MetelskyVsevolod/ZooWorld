@@ -1,6 +1,7 @@
 using System;
 using Animals.Core;
-using Events;
+using EventsHandling;
+using EventsHandling.Events;
 using Zenject;
 using Random = UnityEngine.Random;
 

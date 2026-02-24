@@ -1,6 +1,7 @@
 using System;
 using Common;
-using Events;
+using EventsHandling;
+using EventsHandling.Events;
 using Zenject;
 
 namespace UI

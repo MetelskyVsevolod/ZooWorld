@@ -1,5 +1,6 @@
 using Animals.Core;
-using Events;
+using EventsHandling;
+using EventsHandling.Events;
 using TMPro;
 using UnityEngine;
 using Zenject;
