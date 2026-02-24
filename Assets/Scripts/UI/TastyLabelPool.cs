@@ -1,3 +1,4 @@
+using Common;
 using UnityEngine;
 using UnityEngine.Pool;
 using Zenject;
@@ -11,20 +12,16 @@ namespace UI
         private readonly Transform _poolRoot;
 
         [Inject]
-        public TastyLabelPool(TastyLabelView prefab, [Inject(Id = "PoolRoot")] Transform poolRoot)
+        public TastyLabelPool(TastyLabelView prefab, [Inject(Id = Constants.PoolRootTransformId)] Transform poolRoot)
         {
             _prefab = prefab;
             _poolRoot = poolRoot;
 
             _pool = new ObjectPool<TastyLabelView>(
-                createFunc: Create,
-                actionOnGet: view => view.OnHidden += OnViewHidden,
-                actionOnRelease: view =>
-                {
-                    view.OnHidden -= OnViewHidden;
-                    view.transform.SetParent(_poolRoot);
-                },
-                actionOnDestroy: view => Object.Destroy(view.gameObject),
+                createFunc: CreateView,
+                actionOnGet: OnGetView,
+                actionOnRelease: OnReleaseView,
+                actionOnDestroy: OnDestroyView,
                 collectionCheck: false,
                 defaultCapacity: 4
             );
@@ -42,11 +39,28 @@ namespace UI
             _pool.Release(view);
         }
 
-        private TastyLabelView Create()
+        private TastyLabelView CreateView()
         {
-            var spawnedTastyLabelView = Object.Instantiate(_prefab, _poolRoot);
-            spawnedTastyLabelView.gameObject.SetActive(false);
-            return spawnedTastyLabelView;
+            var view = Object.Instantiate(_prefab, _poolRoot);
+            view.gameObject.SetActive(false);
+            view.name = nameof(TastyLabelView);
+            return view;
+        }
+
+        private void OnGetView(TastyLabelView view)
+        {
+            view.OnHidden += OnViewHidden;
+        }
+
+        private void OnReleaseView(TastyLabelView view)
+        {
+            view.OnHidden -= OnViewHidden;
+            view.transform.SetParent(_poolRoot);
+        }
+
+        private void OnDestroyView(TastyLabelView view)
+        {
+            Object.Destroy(view.gameObject);
         }
     }
 }
