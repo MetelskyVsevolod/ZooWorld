@@ -27,7 +27,7 @@ namespace Spawning
         public AnimalPool(
             DiContainer container,
             GameEventBus eventBus,
-            [Inject(Id = Constants.PoolRootTransformId)] Transform poolRoot)
+            Transform poolRoot)
         {
             _container = container;
             _eventBus = eventBus;

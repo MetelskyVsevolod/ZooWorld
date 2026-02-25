@@ -1,4 +1,3 @@
-using Common;
 using UnityEngine;
 using UnityEngine.Pool;
 using Zenject;
@@ -12,7 +11,7 @@ namespace UI
         private readonly Transform _poolRoot;
 
         [Inject]
-        public TastyLabelPool(TastyLabelView prefab, [Inject(Id = Constants.PoolRootTransformId)] Transform poolRoot)
+        public TastyLabelPool(TastyLabelView prefab, Transform poolRoot)
         {
             _prefab = prefab;
             _poolRoot = poolRoot;

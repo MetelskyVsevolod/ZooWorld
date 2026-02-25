@@ -6,11 +6,16 @@ namespace Systems
 {
     public class BoundaryChecker : MonoBehaviour
     {
-        [Inject] private AnimalRegistry _registry;
         [SerializeField] private float margin = 0.5f;
-
+        private AnimalRegistry _registry;
         private Bounds _worldBounds;
 
+        [Inject]
+        public void Construct(AnimalRegistry registry)
+        {
+            _registry = registry;
+        }
+        
         private void Start()
         {
             var cam = Camera.main;

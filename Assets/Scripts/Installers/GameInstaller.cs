@@ -1,4 +1,3 @@
-using Common;
 using EventsHandling;
 using Spawning;
 using Systems;
@@ -32,28 +31,27 @@ namespace Installers
 
         private void BindPooling()
         {
-            Container.Bind<Transform>().WithId(Constants.PoolRootTransformId).FromInstance(poolRoot).AsCached();
-            Container.Bind<AnimalPool>().AsSingle();
+            Container.Bind<AnimalPool>().AsSingle().WithArguments(poolRoot);
         }
 
         private void BindSpawning()
         {
             Container.Bind<SpawnSettings>().FromInstance(spawnSettings).AsSingle();
             Container.Bind<AnimalFactory>().AsSingle();
-            Container.Bind<AnimalSpawner>().FromInstance(animalSpawner).AsSingle();
+            Container.Bind<AnimalSpawner>().FromInstance(animalSpawner).AsSingle().NonLazy();
         }
 
         private void BindSystems()
         {
             Container.Bind<AnimalRegistry>().AsSingle().NonLazy();
-            Container.Bind<BoundaryChecker>().FromInstance(boundaryChecker).AsSingle();
+            Container.Bind<BoundaryChecker>().FromInstance(boundaryChecker).AsSingle().NonLazy();
             Container.Bind<CollisionResolver>().AsSingle().NonLazy();
         }
 
         private void BindUI()
         {
             Container.Bind<TastyLabelView>().FromInstance(tastyLabelPrefab).AsSingle();
-            Container.Bind<TastyLabelPool>().AsSingle();
+            Container.Bind<TastyLabelPool>().AsSingle().WithArguments(poolRoot);
             Container.Bind<TastyLabelHandler>().AsSingle().NonLazy();
         }
     }
