@@ -1,20 +1,22 @@
 using System;
-using Animals.Core;
+using System.Collections.Generic;
 using EventsHandling;
 using EventsHandling.Events;
+using Systems.Collision;
 using Zenject;
-using Random = UnityEngine.Random;
 
 namespace Systems
 {
     public class CollisionResolver : IDisposable
     {
         private readonly GameEventBus _eventBus;
+        private readonly List<CollisionStrategyBase> _strategies;
 
         [Inject]
-        public CollisionResolver(GameEventBus eventBus)
+        public CollisionResolver(GameEventBus eventBus, List<CollisionStrategyBase> strategies)
         {
             _eventBus = eventBus;
+            _strategies = strategies;
             _eventBus.Subscribe<AnimalCollisionEvent>(OnCollision);
         }
 
@@ -33,34 +35,18 @@ namespace Systems
                 return;
             }
 
-            if (initiator.Config.Role == AnimalRole.Prey && other.Config.Role == AnimalRole.Prey)
+            if (initiator.GetInstanceID() > other.GetInstanceID())
             {
                 return;
             }
 
-            if (initiator.Config.Role == AnimalRole.Predator && other.Config.Role == AnimalRole.Predator)
+            foreach (var strategy in _strategies)
             {
-                ResolvePredatorVsPredator(initiator, other);
-                return;
+                if (strategy.TryResolve(initiator, other, _eventBus))
+                {
+                    break;
+                }
             }
-
-            var predator = initiator.Config.Role == AnimalRole.Predator ? initiator : other;
-            var prey = initiator.Config.Role == AnimalRole.Prey ? initiator : other;
-            ResolvePreyVsPredator(predator, prey);
-        }
-
-        private void ResolvePreyVsPredator(Animal predator, Animal prey)
-        {
-            prey.Die();
-            _eventBus.Publish(new AnimalAteEvent(predator));
-        }
-
-        private void ResolvePredatorVsPredator(Animal predatorA, Animal predatorB)
-        {
-            var loser = Random.value < 0.5f ? predatorA : predatorB;
-            var winner = loser == predatorA ? predatorB : predatorA;
-            loser.Die();
-            _eventBus.Publish(new AnimalAteEvent(winner));
         }
     }
 }

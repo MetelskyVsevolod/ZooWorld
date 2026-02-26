@@ -1,6 +1,7 @@
 using EventsHandling;
 using Spawning;
 using Systems;
+using Systems.Collision;
 using UI;
 using UnityEngine;
 using Zenject;
@@ -21,6 +22,7 @@ namespace Installers
             BindPooling();
             BindSpawning();
             BindSystems();
+            BindCollisionStrategies();
             BindUI();
         }
 
@@ -46,6 +48,12 @@ namespace Installers
             Container.Bind<AnimalRegistry>().AsSingle().NonLazy();
             Container.Bind<BoundaryChecker>().FromInstance(boundaryChecker).AsSingle().NonLazy();
             Container.Bind<CollisionResolver>().AsSingle().NonLazy();
+        }
+
+        private void BindCollisionStrategies()
+        {
+            Container.Bind<CollisionStrategyBase>().To<PredatorPreyCollision>().AsSingle();
+            Container.Bind<CollisionStrategyBase>().To<PredatorPredatorCollision>().AsSingle();
         }
 
         private void BindUI()
