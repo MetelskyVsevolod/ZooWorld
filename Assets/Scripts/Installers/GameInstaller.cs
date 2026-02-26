@@ -12,7 +12,6 @@ namespace Installers
     {
         [SerializeField] private SpawnSettings spawnSettings;
         [SerializeField] private Transform poolRoot;
-        [SerializeField] private AnimalSpawner animalSpawner;
         [SerializeField] private BoundaryChecker boundaryChecker;
         [SerializeField] private TastyLabelView tastyLabelPrefab;
 
@@ -40,7 +39,7 @@ namespace Installers
         {
             Container.Bind<SpawnSettings>().FromInstance(spawnSettings).AsSingle();
             Container.Bind<AnimalFactory>().AsSingle();
-            Container.Bind<AnimalSpawner>().FromInstance(animalSpawner).AsSingle().NonLazy();
+            Container.BindInterfacesTo<AnimalSpawner>().AsSingle();
         }
 
         private void BindSystems()

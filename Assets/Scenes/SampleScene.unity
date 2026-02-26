@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZooWorld.Installers.GameInstaller
   spawnSettings: {fileID: 11400000, guid: 01fdbb70bae4f33448cdad0cfb16f49c, type: 2}
   poolRoot: {fileID: 2032957323}
-  animalSpawner: {fileID: 1335470027}
+  animalSpawner: {fileID: 0}
   boundaryChecker: {fileID: 1996930352}
   tastyLabelPrefab: {fileID: 6672969386286038910, guid: def4935d9b13a864abb8cec34082f0da, type: 3}
 --- !u!114 &227691288
@@ -880,50 +880,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6061940961831352922, guid: 3dddee8682cd1eb46b9acfa9001720e2, type: 3}
   m_PrefabInstance: {fileID: 1115911016}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1335470026
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1335470028}
-  - component: {fileID: 1335470027}
-  m_Layer: 0
-  m_Name: AnimalSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1335470027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1335470026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abb5f512abdc1f548a7bcaf9f54b2e9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ZooWorld.Spawning.AnimalSpawner
---- !u!4 &1335470028
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1335470026}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1426159135
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1223,7 +1179,6 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 227691289}
   - {fileID: 2032957323}
-  - {fileID: 1335470028}
   - {fileID: 1598336659}
   - {fileID: 1996930353}
   - {fileID: 774158303}

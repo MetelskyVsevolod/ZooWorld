@@ -1,5 +1,7 @@
-using System.Collections;
+using System;
+using System.Threading;
 using Animals.Core;
+using Cysharp.Threading.Tasks;
 using Extensions;
 using UnityEngine;
 using Zenject;
@@ -7,30 +9,37 @@ using Random = UnityEngine.Random;
 
 namespace Spawning
 {
-    public class AnimalSpawner : MonoBehaviour
+    public class AnimalSpawner : IInitializable, IDisposable
     {
-        private AnimalFactory _factory;
-        private SpawnSettings _settings;
-        private Coroutine _spawnLoopCoroutine;
-        
+        private readonly AnimalFactory _factory;
+        private readonly SpawnSettings _settings;
+        private CancellationTokenSource _cts;
+
         [Inject]
-        public void Construct(AnimalFactory factory, SpawnSettings settings)
+        public AnimalSpawner(AnimalFactory factory, SpawnSettings settings)
         {
             _factory = factory;
             _settings = settings;
         }
-        
-        private void Start()
+
+        public void Initialize()
         {
-            _spawnLoopCoroutine = StartCoroutine(SpawnLoop());
+            _cts = new CancellationTokenSource();
+            SpawnLoop(_cts.Token).Forget();
         }
 
-        private IEnumerator SpawnLoop()
+        public void Dispose()
         {
-            while (true)
+            _cts?.Cancel();
+            _cts?.Dispose();
+        }
+
+        private async UniTaskVoid SpawnLoop(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
             {
                 var delay = Random.Range(_settings.MinSpawnInterval, _settings.MaxSpawnInterval);
-                yield return new WaitForSeconds(delay);
+                await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: token);
                 SpawnOne();
             }
         }
@@ -55,14 +64,6 @@ namespace Spawning
                 0f,
                 Random.Range(-h.y, h.y)
             );
-        }
-        
-        private void OnDestroy()
-        {
-            if (_spawnLoopCoroutine != null)
-            {
-                StopCoroutine(_spawnLoopCoroutine);
-            }
         }
     }
 }
