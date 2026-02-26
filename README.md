@@ -21,20 +21,24 @@ To add a new movement type:
 
 No other changes needed.
 
+**Chain of Responsibility — Collision Resolution**
+
+Collisions are resolved by iterating a list of `CollisionStrategyBase` subclasses injected via Zenject. Each strategy handles one specific role combination and returns `true` if it handled it, stopping the chain. Adding a new role means writing a new strategy class and registering it in the installer — no existing code changes.
+
 **Data-Driven Design — AnimalConfig**
 
 Every animal type is defined by a `ScriptableObject` asset (`AnimalConfig`) containing its name, role (Prey/Predator), prefab and movement strategy. Adding a new animal means creating a new asset, adding it to `SpawnSettings`, and creating a new prefab if new visuals are needed — no code changes required.
 
-**Observer Pattern — Event Bus**
+**Signal Bus (Zenject)**
 
-Systems communicate through a central `GameEventBus` injected via Zenject rather than holding direct references to each other. Events are `struct` values so publishing is allocation-free. They are marked `readonly` to enforce immutability — an event should never be modified after it is created.
+Systems communicate through Zenject's built-in `SignalBus` rather than holding direct references to each other. All signals are declared in `GameInstaller`, making it the single place to see every event in the system. Signals are `struct` values so firing them is allocation-free. They are marked `readonly` to enforce immutability — a signal should never be modified after it is created.
 
-| Event | Published by | Consumed by                                                                   |
-|---|---|-------------------------------------------------------------------------------|
-| `AnimalSpawnedEvent` | `Animal` | `AnimalRegistry`                                                              |
-| `AnimalDiedEvent` | `Animal` | `AnimalRegistry`, `AnimalPool`, `TastyLabelHandler`, `AnimalDeathCounterView` |
-| `AnimalCollisionEvent` | `Animal` | `CollisionResolver`                                                           |
-| `AnimalAteEvent` | `CollisionResolver` | `TastyLabelHandler`                                                           |
+| Signal | Fired by | Consumed by |
+|---|---|---|
+| `AnimalSpawnedSignal` | `Animal` | `AnimalRegistry` |
+| `AnimalDiedSignal` | `Animal` | `AnimalRegistry`, `AnimalPool`, `TastyLabelHandler`, `AnimalDeathCounterView` |
+| `AnimalCollisionSignal` | `Animal` | `CollisionResolver` |
+| `AnimalAteSignal` | `CollisionResolver` | `TastyLabelHandler` |
 
 **Object Pooling**
 
@@ -42,7 +46,7 @@ Both animals and "Tasty!" label canvases are pooled. `AnimalPool` maintains one 
 
 **Dependency Injection — Zenject**
 
-All services are wired in `GameInstaller`. Plain C# classes use constructor injection. `MonoBehaviour` classes use `[Inject] public void Construct(...)` method injection.
+All services are wired in `GameInstaller`. Plain C# classes use constructor injection. `MonoBehaviour` classes use `[Inject] public void Construct(...)` method injection. Any class that subscribes to signals and needs to be active from scene start is bound with `.NonLazy()`.
 
 ---
 
@@ -55,9 +59,10 @@ Assets/
       Core/           — Animal, AnimalConfig, AnimalRole, MovementStrategyBase
       Movement/       — JumpMovement, LinearMovement
       Editor/         — PolymorphicPickerDrawer, MovementStrategyPickerDrawer
-    EventsHandling/   — GameEventBus, all event structs
+    Signals/          — All signal structs
     Spawning/         — AnimalSpawner, AnimalFactory, AnimalPool, SpawnSettings
     Systems/          — BoundaryChecker, AnimalRegistry, CollisionResolver
+      Collision/      — CollisionStrategyBase, PredatorPreyCollision, PredatorPredatorCollision
     UI/               — TastyLabelView, TastyLabelPool, TastyLabelHandler, AnimalDeathCounterView
     Extensions/       — CollectionExtensions, ComponentExtensions
     Installers/       — GameInstaller
@@ -102,7 +107,6 @@ Assets/
 public class FlyMovement : MovementStrategyBase
 {
     public float speed = 4f;
-    public float hoverHeight = 2f;
 
     public override void OnInitialize(Animal animal) { ... }
     public override void Tick(Animal animal) { ... }
@@ -112,10 +116,28 @@ public class FlyMovement : MovementStrategyBase
 
 That's it. No other files need to change.
 
+**Adding a new collision rule:**
+
+```csharp
+public class ScavengerVsCorpseCollision : CollisionStrategyBase
+{
+    public override bool TryResolve(Animal a, Animal b, GameEventBus eventBus)
+    {
+        // handle the case, return true if handled
+    }
+}
+```
+
+Then register it in `GameInstaller.BindCollisionStrategies()`:
+```csharp
+Container.Bind<CollisionStrategyBase>().To<ScavengerVsCorpseCollision>().AsSingle();
+```
+
 ---
 
 ## Dependencies
 
 - **Unity** 6000.3.6f1
-- **Zenject** — Dependency injection
+- **Zenject** — Dependency injection and signal bus
+- **UniTask** — Allocation-free async/await operations
 - **TextMeshPro** — UI text rendering
