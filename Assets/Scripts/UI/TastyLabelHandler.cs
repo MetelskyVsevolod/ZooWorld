@@ -1,7 +1,6 @@
 using System;
 using Common;
-using EventsHandling;
-using EventsHandling.Events;
+using Signals;
 using Zenject;
 
 namespace UI
@@ -9,31 +8,31 @@ namespace UI
     public class TastyLabelHandler : IDisposable
     {
         private readonly TastyLabelPool _pool;
-        private readonly GameEventBus _eventBus;
+        private readonly SignalBus _signalBus;
 
         [Inject]
-        public TastyLabelHandler(GameEventBus eventBus, TastyLabelPool pool)
+        public TastyLabelHandler(SignalBus signalBus, TastyLabelPool pool)
         {
             _pool = pool;
-            _eventBus = eventBus;
-            eventBus.Subscribe<AnimalDiedEvent>(OnAnimalDied);
-            eventBus.Subscribe<AnimalAteEvent>(OnAnimalAte);
+            _signalBus = signalBus;
+            _signalBus.Subscribe<AnimalDiedSignal>(OnAnimalDied);
+            _signalBus.Subscribe<AnimalAteSignal>(OnAnimalAte);
         }
         
         public void Dispose()
         {
-            _eventBus.Unsubscribe<AnimalDiedEvent>(OnAnimalDied);
-            _eventBus.Unsubscribe<AnimalAteEvent>(OnAnimalAte);
+            _signalBus.Unsubscribe<AnimalDiedSignal>(OnAnimalDied);
+            _signalBus.Unsubscribe<AnimalAteSignal>(OnAnimalAte);
         }
 
-        private void OnAnimalAte(AnimalAteEvent evt)
+        private void OnAnimalAte(AnimalAteSignal signal)
         {
-            _pool.ShowOn(evt.Predator.CanvasTransformSlot, Constants.OnAnimalAteLabelText);
+            _pool.ShowOn(signal.Predator.CanvasTransformSlot, Constants.OnAnimalAteLabelText);
         }
 
-        private void OnAnimalDied(AnimalDiedEvent evt)
+        private void OnAnimalDied(AnimalDiedSignal signal)
         {
-            var tastyLabelView = evt.Animal.GetComponentInChildren<TastyLabelView>();
+            var tastyLabelView = signal.Animal.GetComponentInChildren<TastyLabelView>();
             
             if (tastyLabelView)
             {

@@ -1,5 +1,4 @@
-using EventsHandling;
-using EventsHandling.Events;
+using Signals;
 using UnityEngine;
 using Zenject;
 
@@ -7,7 +6,6 @@ namespace Animals.Core
 {
     public class Animal : MonoBehaviour
     {
-        [Inject] private GameEventBus _eventBus;
         [SerializeField] private Rigidbody rigidbodyComponent;
         [SerializeField] private Transform canvasTransformSlot;
 
@@ -17,6 +15,13 @@ namespace Animals.Core
         public bool IsAlive { get; private set; }
 
         private MovementStrategyBase _movement;
+        private SignalBus _signalBus;
+        
+        [Inject]
+        private void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
         
         private void Update()
         {
@@ -42,7 +47,7 @@ namespace Animals.Core
             _movement.OnInitialize(this);
 
             gameObject.name = config.AnimalName;
-            _eventBus.Publish(new AnimalSpawnedEvent(this));
+            _signalBus.Fire(new AnimalSpawnedSignal(this));
         }
         
         public void Die()
@@ -53,7 +58,7 @@ namespace Animals.Core
             }
 
             IsAlive = false;
-            _eventBus.Publish(new AnimalDiedEvent(this));
+            _signalBus.Fire(new AnimalDiedSignal(this));
             gameObject.SetActive(false);
         }
         
@@ -85,7 +90,7 @@ namespace Animals.Core
                 return;
             }
 
-            _eventBus.Publish(new AnimalCollisionEvent(this, other));
+            _signalBus.Fire(new AnimalCollisionSignal(this, other));
         }
     }
 }

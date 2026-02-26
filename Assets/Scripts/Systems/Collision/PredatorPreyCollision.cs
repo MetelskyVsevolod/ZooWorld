@@ -1,12 +1,12 @@
 using Animals.Core;
-using EventsHandling;
-using EventsHandling.Events;
+using Signals;
+using Zenject;
 
 namespace Systems.Collision
 {
     public class PredatorPreyCollision : CollisionStrategyBase
     {
-        public override bool TryResolve(Animal animalA, Animal animalB, GameEventBus eventBus)
+        public override bool TryResolve(Animal animalA, Animal animalB, SignalBus eventBus)
         {
             Animal predator;
             Animal prey;
@@ -27,7 +27,7 @@ namespace Systems.Collision
             }
 
             prey.Die();
-            eventBus.Publish(new AnimalAteEvent(predator));
+            eventBus.Fire(new AnimalAteSignal(predator));
             return true;
         }
     }

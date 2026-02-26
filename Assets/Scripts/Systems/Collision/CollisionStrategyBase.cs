@@ -1,10 +1,10 @@
 using Animals.Core;
-using EventsHandling;
+using Zenject;
 
 namespace Systems.Collision
 {
     public abstract class CollisionStrategyBase
     {
-        public abstract bool TryResolve(Animal animalA, Animal animalB, GameEventBus eventBus);
+        public abstract bool TryResolve(Animal animalA, Animal animalB, SignalBus signalBus);
     }
 }

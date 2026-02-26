@@ -1,6 +1,5 @@
 using Animals.Core;
-using EventsHandling;
-using EventsHandling.Events;
+using Signals;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -12,14 +11,14 @@ namespace UI
         [SerializeField] private TextMeshProUGUI label;
         [SerializeField] private AnimalRole trackedRole;
 
-        private GameEventBus _eventBus;
+        private SignalBus _signalBus;
         private int _count;
 
         [Inject]
-        public void Construct(GameEventBus eventBus)
+        public void Construct(SignalBus signalBus)
         {
-            _eventBus = eventBus;
-            _eventBus.Subscribe<AnimalDiedEvent>(OnAnimalDied);
+            _signalBus = signalBus;
+            _signalBus.Subscribe<AnimalDiedSignal>(OnAnimalDied);
         }
 
         private void Start()
@@ -29,10 +28,10 @@ namespace UI
 
         private void OnDestroy()
         {
-            _eventBus.Unsubscribe<AnimalDiedEvent>(OnAnimalDied);
+            _signalBus.Unsubscribe<AnimalDiedSignal>(OnAnimalDied);
         }
         
-        private void OnAnimalDied(AnimalDiedEvent evt)
+        private void OnAnimalDied(AnimalDiedSignal evt)
         {
             if (evt.Animal.Config.Role != trackedRole)
             {

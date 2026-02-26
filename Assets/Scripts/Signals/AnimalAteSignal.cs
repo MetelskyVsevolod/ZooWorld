@@ -1,12 +1,12 @@
 using Animals.Core;
 
-namespace EventsHandling.Events
+namespace Signals
 {
-    public readonly struct AnimalAteEvent
+    public readonly struct AnimalAteSignal
     {
         public readonly Animal Predator;
 
-        public AnimalAteEvent(Animal predator)
+        public AnimalAteSignal(Animal predator)
         {
             Predator = predator;
         }

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Animals.Core;
-using Common;
-using EventsHandling;
-using EventsHandling.Events;
 using Extensions;
+using Signals;
 using UnityEngine;
 using UnityEngine.Pool;
 using Zenject;
@@ -18,7 +16,7 @@ namespace Spawning
         private const int MaxSize = 100;
         
         private readonly DiContainer _container;
-        private readonly GameEventBus _eventBus;
+        private readonly SignalBus _signalBus;
         private readonly Transform _poolRoot;
 
         private readonly Dictionary<AnimalConfig, ObjectPool<Animal>> _pools = new();
@@ -26,14 +24,14 @@ namespace Spawning
         [Inject]
         public AnimalPool(
             DiContainer container,
-            GameEventBus eventBus,
+            SignalBus signalBus,
             Transform poolRoot)
         {
             _container = container;
-            _eventBus = eventBus;
+            _signalBus = signalBus;
             _poolRoot = poolRoot;
 
-            _eventBus.Subscribe<AnimalDiedEvent>(OnAnimalDied);
+            _signalBus.Subscribe<AnimalDiedSignal>(OnAnimalDied);
         }
 
         public Animal Get(AnimalConfig config)
@@ -43,7 +41,7 @@ namespace Spawning
         
         public void Dispose()
         {
-            _eventBus.Unsubscribe<AnimalDiedEvent>(OnAnimalDied);
+            _signalBus.Unsubscribe<AnimalDiedSignal>(OnAnimalDied);
         }
         
         private void Release(Animal animal)
@@ -99,9 +97,9 @@ namespace Spawning
             Object.Destroy(animal.gameObject);
         }
 
-        private void OnAnimalDied(AnimalDiedEvent evt)
+        private void OnAnimalDied(AnimalDiedSignal signal)
         {
-            Release(evt.Animal);
+            Release(signal.Animal);
         }
     }
 }

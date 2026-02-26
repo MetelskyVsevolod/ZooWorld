@@ -1,4 +1,4 @@
-using EventsHandling;
+using Signals;
 using Spawning;
 using Systems;
 using Systems.Collision;
@@ -17,7 +17,7 @@ namespace Installers
 
         public override void InstallBindings()
         {
-            BindCore();
+            BindSignals();
             BindPooling();
             BindSpawning();
             BindSystems();
@@ -25,9 +25,14 @@ namespace Installers
             BindUI();
         }
 
-        private void BindCore()
+        private void BindSignals()
         {
-            Container.Bind<GameEventBus>().AsSingle();
+            SignalBusInstaller.Install(Container);
+    
+            Container.DeclareSignal<AnimalSpawnedSignal>();
+            Container.DeclareSignal<AnimalDiedSignal>();
+            Container.DeclareSignal<AnimalCollisionSignal>();
+            Container.DeclareSignal<AnimalAteSignal>();
         }
 
         private void BindPooling()

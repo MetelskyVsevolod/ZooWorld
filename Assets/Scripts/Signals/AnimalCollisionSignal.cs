@@ -1,13 +1,13 @@
 using Animals.Core;
 
-namespace EventsHandling.Events
+namespace Signals
 {
-    public readonly struct AnimalCollisionEvent
+    public readonly struct AnimalCollisionSignal
     {
         public readonly Animal Initiator;
         public readonly Animal Other;
         
-        public AnimalCollisionEvent(Animal initiator, Animal other)
+        public AnimalCollisionSignal(Animal initiator, Animal other)
         {
             Initiator = initiator;
             Other = other;

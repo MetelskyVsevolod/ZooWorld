@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using EventsHandling;
-using EventsHandling.Events;
+using Signals;
 using Systems.Collision;
 using Zenject;
 
@@ -9,26 +8,26 @@ namespace Systems
 {
     public class CollisionResolver : IDisposable
     {
-        private readonly GameEventBus _eventBus;
+        private readonly SignalBus _signalBus;
         private readonly List<CollisionStrategyBase> _strategies;
 
         [Inject]
-        public CollisionResolver(GameEventBus eventBus, List<CollisionStrategyBase> strategies)
+        public CollisionResolver(SignalBus signalBus, List<CollisionStrategyBase> strategies)
         {
-            _eventBus = eventBus;
+            _signalBus = signalBus;
             _strategies = strategies;
-            _eventBus.Subscribe<AnimalCollisionEvent>(OnCollision);
+            _signalBus.Subscribe<AnimalCollisionSignal>(OnCollision);
         }
 
         public void Dispose()
         {
-            _eventBus.Unsubscribe<AnimalCollisionEvent>(OnCollision);
+            _signalBus.Unsubscribe<AnimalCollisionSignal>(OnCollision);
         }
         
-        private void OnCollision(AnimalCollisionEvent evt)
+        private void OnCollision(AnimalCollisionSignal signal)
         {
-            var initiator = evt.Initiator;
-            var other = evt.Other;
+            var initiator = signal.Initiator;
+            var other = signal.Other;
 
             if (!initiator.IsAlive || !other.IsAlive)
             {
@@ -42,7 +41,7 @@ namespace Systems
 
             foreach (var strategy in _strategies)
             {
-                if (strategy.TryResolve(initiator, other, _eventBus))
+                if (strategy.TryResolve(initiator, other, _signalBus))
                 {
                     break;
                 }

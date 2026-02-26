@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Animals.Core;
-using EventsHandling;
-using EventsHandling.Events;
+using Signals;
 using Zenject;
 
 namespace Systems
@@ -10,32 +9,32 @@ namespace Systems
     public class AnimalRegistry : IDisposable
     {
         private readonly HashSet<Animal> _liveAnimals = new();
-        private readonly GameEventBus _eventBus;
+        private readonly SignalBus _signalBus;
 
         public IReadOnlyCollection<Animal> LiveAnimals => _liveAnimals;
 
         [Inject]
-        public AnimalRegistry(GameEventBus eventBus)
+        public AnimalRegistry(SignalBus signalBus)
         {
-            _eventBus = eventBus;
-            _eventBus.Subscribe<AnimalSpawnedEvent>(OnSpawned);
-            _eventBus.Subscribe<AnimalDiedEvent>(OnDied);
+            _signalBus = signalBus;
+            _signalBus.Subscribe<AnimalSpawnedSignal>(OnSpawned);
+            _signalBus.Subscribe<AnimalDiedSignal>(OnDied);
         }
         
         public void Dispose()
         {
-            _eventBus.Unsubscribe<AnimalSpawnedEvent>(OnSpawned);
-            _eventBus.Unsubscribe<AnimalDiedEvent>(OnDied);
+            _signalBus.Unsubscribe<AnimalSpawnedSignal>(OnSpawned);
+            _signalBus.Unsubscribe<AnimalDiedSignal>(OnDied);
         }
 
-        private void OnSpawned(AnimalSpawnedEvent evt)
+        private void OnSpawned(AnimalSpawnedSignal signal)
         {
-            _liveAnimals.Add(evt.Animal);
+            _liveAnimals.Add(signal.Animal);
         }
 
-        private void OnDied(AnimalDiedEvent evt)
+        private void OnDied(AnimalDiedSignal signal)
         {
-            _liveAnimals.Remove(evt.Animal);
+            _liveAnimals.Remove(signal.Animal);
         }
     }
 }
